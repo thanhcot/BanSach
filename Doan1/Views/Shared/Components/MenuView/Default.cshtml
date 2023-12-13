@@ -1,0 +1,70 @@
+﻿@using Doan1.Ulitities
+@model IList<Doan1.Models.Menu>
+
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-lg-2">
+                <div class="header__logo">
+                    <a href="./index.html"><img src="~/img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-7">
+                <nav class="header__menu">
+                    <ul>
+                        @foreach (var menu in Model.Where(m => m.Levels == 1).OrderBy(n => n.Position))
+                        {
+                            var pid = menu.MenuID;
+                            string url = Functions.TitleSlugGeneration("list", menu.MenuName, menu.MenuID);
+                            if (!string.IsNullOrEmpty(menu.Alias))
+                            {
+                                url = menu.Alias;
+                            }
+                            var Smenu = Model.Where(p => p.ParentID == pid).OrderBy(p => p.Position).ToList();
+                            <li>
+                                <a href="/@url">@menu.MenuName</a>
+                                @if (Smenu.Count > 0)
+                                {
+                                    <ul class="dropdown">
+                                        @foreach (var smn in Smenu)
+                                        {
+                                            <li><a href="/@url">@smn.MenuName</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__right">
+                    <div class="header__right__auth">
+                        <a href="#">Đăng Nhập</a>
+                        <a href="#">Đăng Kí</a>
+                    </div>
+                    <ul class="header__right__widget">
+                        <li><span class="icon_search search-switch"></span></li>
+                        <li>
+                            <a href="#">
+                                <span class="icon_heart_alt"></span>
+                                <div class="tip">2</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon_bag_alt"></span>
+                                <div class="tip">2</div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="canvas__open">
+            <i class="fa fa-bars"></i>
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->
